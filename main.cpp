@@ -43,7 +43,7 @@ int main() {
             double v = val(x, y);
             if(v >= 4) {
                 point3d.color = 0xFF0000;
-            } else if(v >= 2) {
+            } else if(v >= 0){
                 point3d.color = 0xFF00;
             } else {
                 point3d.color = 0xFF;

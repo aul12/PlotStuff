@@ -21,7 +21,7 @@ public:
         this->width = width;
         this->height = height;
     }
-    virtual void set(uint32_t x, uint32_t y, ColorChannel channel, uint8_t val) = 0;
+    virtual void set(uint32_t x, uint32_t y, uint8_t r, uint8_t g, uint8_t b) = 0;
     virtual void write() = 0;
     virtual void clear() = 0;
     int32_t width, height;

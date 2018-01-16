@@ -66,9 +66,7 @@ void Render3d::render(ImageWriter* writer, RenderConfig config) {
             auto g = (uint8_t)((iterator->color & 0xFF00) >> 8);
             auto b = (uint8_t)(iterator->color & 0xFF);
 
-            writer->set((uint32_t)x, (uint32_t)y, RED, r);
-            writer->set((uint32_t)x, (uint32_t)y, GREEN, g);
-            writer->set((uint32_t)x, (uint32_t)y, BLUE, b);
+            writer->set((uint32_t)x, (uint32_t)y, r, g, b);
         }
     }
     writer->write();

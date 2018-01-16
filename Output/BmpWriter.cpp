@@ -12,8 +12,10 @@ BmpWriter::BmpWriter(uint32_t width, uint32_t height) : ImageWriter(width, heigh
     data = (uint8_t*)calloc(sizeof(uint8_t), width*height*3+54);
 }
 
-void BmpWriter::set(uint32_t x, uint32_t y, ColorChannel channel, uint8_t val) {
-    data[54+3*(y*width + x)+channel] = val;
+void BmpWriter::set(uint32_t x, uint32_t y, uint8_t r, uint8_t b, uint8_t g) {
+    data[54+3*(y*width + x)+0] = b;
+    data[54+3*(y*width + x)+1] = g;
+    data[54+3*(y*width + x)+2] = r;
 }
 
 void BmpWriter::write() {

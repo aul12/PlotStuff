@@ -56,7 +56,23 @@ XWriter::XWriter(int32_t width, int32_t height) : ImageWriter(width, height) {
     XFlush(display);
 }
 
-void XWriter::set(uint32_t x, uint32_t y, ColorChannel channel, uint8_t val) {
+void XWriter::set(uint32_t x, uint32_t y, uint8_t r, uint8_t b, uint8_t g) {
+    XColor xcolour{};
+ /* first, find the default visual for our screen. */
+    Visual* default_visual = DefaultVisual(display, DefaultScreen(display));
+/* this creates a new color map. the number of color entries in this map */
+/* is determined by the number of colors supported on the given screen.  */
+    Colormap my_colormap = XCreateColormap(display,
+                                           win,
+                                           default_visual,
+                                           AllocNone);
+// I guess XParseColor will work here
+    xcolour.red = r*256;
+    xcolour.green = g*256;
+    xcolour.blue = b*256;
+    XAllocColor(display, my_colormap, &xcolour);
+
+    XSetForeground(display, gc, xcolour.pixel);
     XDrawPoint(display, win, gc, x, y);
 }
 
