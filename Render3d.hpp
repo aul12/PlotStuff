@@ -23,6 +23,7 @@ class Render3d {
 public:
     void addPoint(Point3d point);
     void render(ImageWriter* writer, RenderConfig config);
+    void clear();
 private:
     std::vector<Point3d> points;
 };

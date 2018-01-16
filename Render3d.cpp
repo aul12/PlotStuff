@@ -71,3 +71,7 @@ void Render3d::render(ImageWriter* writer, RenderConfig config) {
     }
     writer->write();
 }
+
+void Render3d::clear() {
+    points.clear();
+}

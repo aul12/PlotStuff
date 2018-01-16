@@ -73,7 +73,7 @@ void XWriter::set(uint32_t x, uint32_t y, uint8_t r, uint8_t b, uint8_t g) {
     XAllocColor(display, my_colormap, &xcolour);
 
     XSetForeground(display, gc, xcolour.pixel);
-    XDrawPoint(display, win, gc, x, y);
+    XDrawPoint(display, win, gc, x, height-y);
 }
 
 void XWriter::clear() {

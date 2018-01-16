@@ -8,12 +8,6 @@
 #include <cstdint>
 #include <string>
 
-enum ColorChannel {
-    BLUE = 0,
-    GREEN = 1,
-    RED = 2
-};
-
 
 class ImageWriter {
 public:
