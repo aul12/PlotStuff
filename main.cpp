@@ -4,7 +4,7 @@
 #include "Output/BmpWriter.hpp"
 #include "Output/XWriter.hpp"
 
-#define STEP 0.05
+#define STEP 0.1
 
 double val(double x, double y) {
     return fabs(x)*x*cos(y/2);
@@ -17,7 +17,7 @@ int main() {
     config.zScale = 5;
     config.rotation = M_PI/4;
     config.offsetX = 0;
-    config.offsetY = +200;
+    config.offsetY = 0;
 
 
     Render3d render3d;
@@ -56,16 +56,16 @@ int main() {
         }
     }
 
-   // BmpWriter writer(400, 400);
+    BmpWriter bwriter(400, 400);
     BmpWriter::fname = "test.bmp";
 
-    XWriter writer(200, 200);
+    XWriter xwriter(200, 200);
 
     bool renderReq = true;
 
     while(true) {
         if(renderReq) {
-            render3d.render(&writer, config);
+            render3d.render(&xwriter, config);
         }
         renderReq = true;
 
@@ -79,10 +79,10 @@ int main() {
                 config.rotation -= M_PI/8.0;
                 break;
             case 'w':
-                config.zTilt += M_PI/8.0;
+                config.zTilt = std::min(config.zTilt+M_PI/8.0, M_PI/2);
                 break;
             case 's':
-                config.zTilt -= M_PI/8.0;
+                config.zTilt = std::max(config.zTilt-M_PI/8.0, -M_PI/2);
                 break;
             case '+':
                 config.xScale *= 1.2;
@@ -93,6 +93,10 @@ int main() {
                 config.xScale /= 1.2;
                 config.yScale /= 1.2;
                 config.zScale /= 1.2;
+                break;
+            case 'b':
+                render3d.render(&bwriter, config);
+                renderReq = false;
                 break;
             default:
                 renderReq = false;

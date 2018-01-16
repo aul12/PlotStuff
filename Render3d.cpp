@@ -3,19 +3,33 @@
 //
 
 #include <cmath>
+#include <algorithm>
 #include "Render3d.hpp"
 
 void Render3d::addPoint(Point3d point) {
-    for(auto iterator = points.begin(); iterator != points.end(); iterator++) {
+    /*for(auto iterator = points.begin(); iterator != points.end(); iterator++) {
         if(point.norm2() > iterator->norm2()) {
             points.insert(iterator, point);
             return;
         }
-    }
+    }*/
     points.push_back(point);
 }
 
 void Render3d::render(ImageWriter* writer, RenderConfig config) {
+    double xCam, yCam, zCam;
+
+    xCam = cos(config.rotation) * 1000;
+    yCam = sin(config.rotation) * 1000;
+    zCam = sin(config.zTilt) * 1000;
+
+    std::sort(points.begin(), points.end(), [xCam, yCam, zCam](Point3d a, Point3d b) {
+        double aDist = SQR(a.x - xCam) + SQR(a.y - yCam) + SQR(a.z - zCam);
+        double bDist = SQR(b.x - xCam) + SQR(b.y - yCam) + SQR(b.z - zCam);
+
+        return (aDist > bDist);
+    });
+
     writer->clear();
 
     double cosRot = cos(config.rotation);

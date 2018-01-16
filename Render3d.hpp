@@ -6,7 +6,7 @@
 #define KOMISCHESPLOTTINGDINGS_RENDER3D_HPP
 
 
-#include <list>
+#include <vector>
 #include <cstdint>
 
 #include "Output/ImageWriter.hpp"
@@ -24,7 +24,7 @@ public:
     void addPoint(Point3d point);
     void render(ImageWriter* writer, RenderConfig config);
 private:
-    std::list<Point3d> points;
+    std::vector<Point3d> points;
 };
 
 

@@ -7,6 +7,7 @@
 
 
 #include <cstdint>
+#define SQR(x) ((x)*(x))
 
 class Point3d {
 public:
