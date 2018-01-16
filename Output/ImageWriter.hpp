@@ -11,14 +11,14 @@
 
 class ImageWriter {
 public:
-    ImageWriter(int32_t width, int32_t height) {
+    ImageWriter(uint32_t width, uint32_t height) {
         this->width = width;
         this->height = height;
     }
     virtual void set(uint32_t x, uint32_t y, uint8_t r, uint8_t g, uint8_t b) = 0;
     virtual void write() = 0;
     virtual void clear() = 0;
-    int32_t width, height;
+    uint32_t width, height;
 };
 
 

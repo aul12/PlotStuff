@@ -4,10 +4,7 @@
 
 #include "XWriter.hpp"
 
-#include <unistd.h>		/* sleep(), etc.  */
-#include <X11/Xlib.h>
-
-XWriter::XWriter(int32_t width, int32_t height) : ImageWriter(width, height) {
+XWriter::XWriter(uint32_t width, uint32_t height) : ImageWriter(width, height) {
     char *display_name = getenv("DISPLAY");  /* address of the X display.      */
     /*  in our window.			     */
 
@@ -44,7 +41,7 @@ XWriter::XWriter(int32_t width, int32_t height) : ImageWriter(width, height) {
 
     unsigned long valuemask = 0;		/* which values in 'values' to  */
     /* check when creating the GC.  */
-    XGCValues values;			/* initial values for the GC.   */
+    XGCValues values{};			/* initial values for the GC.   */
 
     gc = XCreateGC(display, win, valuemask, &values);
     if (gc < 0) {
@@ -57,19 +54,19 @@ XWriter::XWriter(int32_t width, int32_t height) : ImageWriter(width, height) {
 }
 
 void XWriter::set(uint32_t x, uint32_t y, uint8_t r, uint8_t b, uint8_t g) {
-    XColor xcolour{};
  /* first, find the default visual for our screen. */
-    Visual* default_visual = DefaultVisual(display, DefaultScreen(display));
+    static Visual* default_visual = DefaultVisual(display, DefaultScreen(display));
 /* this creates a new color map. the number of color entries in this map */
 /* is determined by the number of colors supported on the given screen.  */
-    Colormap my_colormap = XCreateColormap(display,
+    static Colormap my_colormap = XCreateColormap(display,
                                            win,
                                            default_visual,
                                            AllocNone);
+    XColor xcolour{};
 // I guess XParseColor will work here
-    xcolour.red = r*256;
-    xcolour.green = g*256;
-    xcolour.blue = b*256;
+    xcolour.red = (uint16_t)(r*256);
+    xcolour.green = (uint16_t)(g*256);
+    xcolour.blue = (uint16_t)(b*256);
     XAllocColor(display, my_colormap, &xcolour);
 
     XSetForeground(display, gc, xcolour.pixel);
@@ -80,7 +77,7 @@ void XWriter::clear() {
     XClearWindow(display, win);
     XFlush(display);
 
-    XWindowAttributes wndAttr;
+    XWindowAttributes wndAttr{};
     XGetWindowAttributes(display,win,&wndAttr);
     this->width = wndAttr.width;
     this->height = wndAttr.height;

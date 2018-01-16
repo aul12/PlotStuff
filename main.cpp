@@ -7,27 +7,22 @@
 #include "Output/XWriter.hpp"
 
 
-std::complex<double> val(std::complex<double> z) {
-    return z*z;
-}
-
 int main() {
     RenderConfig config{};
     config.zTilt = M_PI/4;
-    config.xScale = config.yScale = 20;
-    config.zScale = 20;
-    config.rotation = M_PI/4;
+    config.xScale = config.yScale = config.zScale = 15;
+    config.rotation = M_PI* 5/4;
     config.offsetX = 0;
     config.offsetY = 0;
 
 
     Render3d render3d;
-    Plot plot(3,0.1);
+    Plot plot(10,0.04, true);
     plot.draw([](std::complex<double> z){
         return z;
     }, &render3d);
 
-    BmpWriter bwriter(400, 400);
+    BmpWriter bwriter(600, 600);
     BmpWriter::fname = "test.bmp";
 
     XWriter xwriter(200, 200);
@@ -44,16 +39,16 @@ int main() {
             case 'q':
                 return 0;
             case 'd':
-                config.rotation += M_PI/8.0;
+                config.rotation -= M_PI/8.0;
                 break;
             case 'a':
-                config.rotation -= M_PI/8.0;
+                config.rotation += M_PI/8.0;
                 break;
             case 'w':
                 config.zTilt = std::min(config.zTilt+M_PI/8.0, M_PI/2);
                 break;
             case 's':
-                config.zTilt = std::max(config.zTilt-M_PI/8.0, -M_PI/2);
+                config.zTilt = std::max(config.zTilt-M_PI/8.0, 0.0);
                 break;
             case '+':
                 config.xScale *= 1.2;
@@ -66,7 +61,9 @@ int main() {
                 config.zScale /= 1.2;
                 break;
             case 'b':
+                std::cout << "Rendering ..." << std::endl;
                 render3d.render(&bwriter, config);
+                std::cout << "Finished" << std::endl;
                 renderReq = false;
                 break;
             default:

@@ -7,12 +7,6 @@
 #include "Render3d.hpp"
 
 void Render3d::addPoint(Point3d point) {
-    /*for(auto iterator = points.begin(); iterator != points.end(); iterator++) {
-        if(point.norm2() > iterator->norm2()) {
-            points.insert(iterator, point);
-            return;
-        }
-    }*/
     points.push_back(point);
 }
 
@@ -27,7 +21,7 @@ void Render3d::render(ImageWriter* writer, RenderConfig config) {
         double aDist = SQR(a.x - xCam) + SQR(a.y - yCam) + SQR(a.z - zCam);
         double bDist = SQR(b.x - xCam) + SQR(b.y - yCam) + SQR(b.z - zCam);
 
-        return (aDist > bDist);
+        return (aDist < bDist);
     });
 
     writer->clear();
@@ -37,13 +31,13 @@ void Render3d::render(ImageWriter* writer, RenderConfig config) {
     double sinTilt = sin(config.zTilt);
     double cosTilt = cos(config.zTilt);
 
-    for(auto iterator = points.begin(); iterator != points.end(); iterator++) {
+    for (auto &point : points) {
         double x,y,z;
 
         // Rotate around z-Axis
-        x = (cosRot * iterator->x - sinRot * iterator->y);
-        y = (sinRot *  iterator->x + cosRot * iterator->y);
-        z = iterator->z;
+        x = (cosRot * point.x - sinRot * point.y);
+        y = (sinRot * point.x + cosRot * point.y);
+        z = point.z;
 
         // Scale
         x *= config.xScale;
@@ -62,9 +56,9 @@ void Render3d::render(ImageWriter* writer, RenderConfig config) {
         y += config.offsetY;
 
         if(x >= 0 && y >= 0 && x < writer->width &&  y < writer->height) {
-            auto r = (uint8_t)((iterator->color & 0xFF0000) >> 16);
-            auto g = (uint8_t)((iterator->color & 0xFF00) >> 8);
-            auto b = (uint8_t)(iterator->color & 0xFF);
+            auto r = (uint8_t)((point.color & 0xFF0000) >> 16);
+            auto g = (uint8_t)((point.color & 0xFF00) >> 8);
+            auto b = (uint8_t)(point.color & 0xFF);
 
             writer->set((uint32_t)x, (uint32_t)y, r, g, b);
         }

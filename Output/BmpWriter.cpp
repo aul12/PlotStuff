@@ -64,5 +64,5 @@ void BmpWriter::write32(uint8_t *data, int32_t val) {
 
 void BmpWriter::clear() {
     free(data);
-    data = (uint8_t*)calloc(sizeof(uint8_t), (size_t)(width*height*3+54));
+    data = (uint8_t*)calloc(sizeof(uint8_t), width*height*3+54);
 }
