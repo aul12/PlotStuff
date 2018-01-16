@@ -50,12 +50,12 @@ void Render3d::render(ImageWriter* writer, RenderConfig config) {
         y *= config.yScale;
         z *= config.zScale;
 
+        // Tilt
+        y = z * cosTilt + y * sinTilt;
+
         // Center on image
         x += writer->width/2;
         y += writer->height/2;
-
-        // Tilt
-        y = z * cosTilt + y * sinTilt;
 
         // Offset
         x += config.offsetX;
