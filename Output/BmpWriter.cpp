@@ -4,12 +4,13 @@
 
 #include <cstdlib>
 #include <iostream>
+#include <utility>
 #include "BmpWriter.hpp"
 
-std::string BmpWriter::fname = "out.bmp";
 
-BmpWriter::BmpWriter(uint32_t width, uint32_t height) : ImageWriter(width, height) {
+BmpWriter::BmpWriter(uint32_t width, uint32_t height, std::string fname) : ImageWriter(width, height) {
     data = (uint8_t*)calloc(sizeof(uint8_t), width*height*3+54);
+    this->fname  = std::move(fname);
 }
 
 void BmpWriter::set(uint32_t x, uint32_t y, uint8_t r, uint8_t b, uint8_t g) {

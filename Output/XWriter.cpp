@@ -79,8 +79,8 @@ void XWriter::clear() {
 
     XWindowAttributes wndAttr{};
     XGetWindowAttributes(display,win,&wndAttr);
-    this->width = wndAttr.width;
-    this->height = wndAttr.height;
+    this->width = (unsigned int)wndAttr.width;
+    this->height = (unsigned int)wndAttr.height;
 }
 
 void XWriter::write() {

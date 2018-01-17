@@ -10,28 +10,35 @@
 int main() {
     RenderConfig config{};
     config.zTilt = M_PI/4;
-    config.xScale = config.yScale = config.zScale = 15;
+    config.xScale = config.yScale = 15;
+    config.zScale = 15;
     config.rotation = M_PI* 5/4;
     config.offsetX = 0;
-    config.offsetY = 0;
+    config.offsetY = -80;
 
 
     Render3d render3d;
-    Plot plot(10,0.04, true);
+    Plot plot(10,0.08, true);
     plot.draw([](std::complex<double> z){
-        return z;
+        return sqrt(z);
+       // return z;
+        //return z*z;
+        //return (pow(z,3)-std::complex<double>(1,0))/z;
+        //return std::complex<double>(1,0)/(std::complex<double>(1,0)+z*z);
+        //return sin(z);
+        //return exp(std::complex<double>(1,0)/z);
+
     }, &render3d);
 
-    BmpWriter bwriter(600, 600);
-    BmpWriter::fname = "test.bmp";
+    BmpWriter bmpWriter(800, 800, "test.bmp");
 
-    XWriter xwriter(200, 200);
+    XWriter xWriter(800, 800);
 
     bool renderReq = true;
 
     while(true) {
         if(renderReq) {
-            render3d.render(&xwriter, config);
+            render3d.render(&xWriter, config);
         }
         renderReq = true;
 
@@ -62,7 +69,7 @@ int main() {
                 break;
             case 'b':
                 std::cout << "Rendering ..." << std::endl;
-                render3d.render(&bwriter, config);
+                render3d.render(&bmpWriter, config);
                 std::cout << "Finished" << std::endl;
                 renderReq = false;
                 break;

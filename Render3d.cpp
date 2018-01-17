@@ -7,6 +7,14 @@
 #include "Render3d.hpp"
 
 void Render3d::addPoint(Point3d point) {
+    double r = sqrt(point.x * point.x + point.y + point.y);
+    if(r > rMax) {
+        rMax = r;
+    }
+
+    if(fabs(point.z) > zMax) {
+        zMax = point.z;
+    }
     points.push_back(point);
 }
 
@@ -23,6 +31,9 @@ void Render3d::render(ImageWriter* writer, RenderConfig config) {
 
         return (aDist < bDist);
     });
+
+    config.xScale = config.yScale = writer->width/2 * 1/rMax * 1/2;
+    config.yScale = writer->height/2 * 1/zMax * 1/2;
 
     writer->clear();
 

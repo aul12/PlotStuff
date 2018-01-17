@@ -26,6 +26,7 @@ public:
     void clear();
 private:
     std::vector<Point3d> points;
+    double rMax, zMax;
 };
 
 
