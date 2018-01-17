@@ -10,18 +10,12 @@
 int main() {
     RenderConfig config{};
     config.zTilt = M_PI/4;
-    config.xScale = config.yScale = 15;
-    config.zScale = 15;
     config.rotation = M_PI* 5/4;
-    config.offsetX = 0;
-    config.offsetY = -80;
-
 
     Render3d render3d;
     Plot plot(10,0.08, true);
     plot.draw([](std::complex<double> z){
-        return sqrt(z);
-       // return z;
+        return z;
         //return z*z;
         //return (pow(z,3)-std::complex<double>(1,0))/z;
         //return std::complex<double>(1,0)/(std::complex<double>(1,0)+z*z);
@@ -57,7 +51,7 @@ int main() {
             case 's':
                 config.zTilt = std::max(config.zTilt-M_PI/8.0, 0.0);
                 break;
-            case '+':
+           /* case '+':
                 config.xScale *= 1.2;
                 config.yScale *= 1.2;
                 config.zScale *= 1.2;
@@ -66,7 +60,7 @@ int main() {
                 config.xScale /= 1.2;
                 config.yScale /= 1.2;
                 config.zScale /= 1.2;
-                break;
+                break;*/
             case 'b':
                 std::cout << "Rendering ..." << std::endl;
                 render3d.render(&bmpWriter, config);

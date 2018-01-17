@@ -14,9 +14,7 @@
 
 struct RenderConfig {
     double zTilt;
-    double xScale, yScale, zScale;
     double rotation;
-    double offsetX, offsetY;
 };
 
 class Render3d {

@@ -32,8 +32,8 @@ void Render3d::render(ImageWriter* writer, RenderConfig config) {
         return (aDist < bDist);
     });
 
-    config.xScale = config.yScale = writer->width/2 * 1/rMax * 1/2;
-    config.yScale = writer->height/2 * 1/zMax * 1/2;
+    double rScale = writer->width/2 * 1/rMax * 1/2;
+    double zScale = writer->height/2 * 1/zMax;
 
     writer->clear();
 
@@ -51,20 +51,16 @@ void Render3d::render(ImageWriter* writer, RenderConfig config) {
         z = point.z;
 
         // Scale
-        x *= config.xScale;
-        y *= config.yScale;
-        z *= config.zScale;
+        x *= rScale;
+        y *= rScale;
+        z *= zScale;
 
         // Tilt
         y = z * cosTilt + y * sinTilt;
 
         // Center on image
         x += writer->width/2;
-        y += writer->height/2;
-
-        // Offset
-        x += config.offsetX;
-        y += config.offsetY;
+        y += writer->height/4;
 
         if(x >= 0 && y >= 0 && x < writer->width &&  y < writer->height) {
             auto r = (uint8_t)((point.color & 0xFF0000) >> 16);

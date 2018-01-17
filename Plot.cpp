@@ -25,10 +25,12 @@ void Plot::draw(std::function<std::complex<double>(std::complex<double>)> f, Ren
             point3d.y = c;
             point3d.z = 0;
             renderer->addPoint(point3d);
-            point3d.x = 0;
-            point3d.y = 0;
-            point3d.z = c;
-            renderer->addPoint(point3d);
+            if(c >= 0) {
+                point3d.x = 0;
+                point3d.y = 0;
+                point3d.z = c;
+                renderer->addPoint(point3d);
+            }
         }
         for(double c=range-0.3; c<range; c+=res) {
             for(int a = 0; a<16; a++) {
