@@ -10,58 +10,115 @@ Plot::Plot(double range, double res, bool axisEnabled) {
     this->axisEnabled = axisEnabled;
 }
 
-void Plot::draw(std::function<std::complex<double>(std::complex<double>)> f, Render3d *renderer) {
+template<typename I, typename O>
+void Plot::draw(Render3d *renderer, std::function<O(I)> f, std::function<bool(I)> set) {
     renderer->clear();
+    this->drawAxis(renderer);
+}
 
-    Point3d point3d{};
-    if(axisEnabled) {
-        point3d.color = 0xFFFFFF;
-        for(double c=-range; c<range; c+=res) {
-            point3d.x = c;
-            point3d.y = 0;
-            point3d.z = 0;
-            renderer->addPoint(point3d);
-            point3d.x = 0;
-            point3d.y = c;
-            point3d.z = 0;
-            renderer->addPoint(point3d);
-            if(c >= 0) {
-                point3d.x = 0;
-                point3d.y = 0;
-                point3d.z = c;
-                renderer->addPoint(point3d);
-            }
-        }
-        for(double c=range-0.3; c<range; c+=res) {
-            for(int a = 0; a<16; a++) {
-                point3d.x = c;
-                point3d.y = sin(a/16.0 * 2 * M_PI) * (range-c);
-                point3d.z = cos(a/16.0 * 2 * M_PI) * (range-c);
-                renderer->addPoint(point3d);
-                point3d.z = c;
-                point3d.y = sin(a/16.0 * 2 * M_PI) * (range-c);
-                point3d.x = cos(a/16.0 * 2 * M_PI) * (range-c);
-                renderer->addPoint(point3d);
-                point3d.y = c;
-                point3d.x = sin(a/16.0 * 2 * M_PI) * (range-c);
-                point3d.z = cos(a/16.0 * 2 * M_PI) * (range-c);
-                renderer->addPoint(point3d);
+template<>
+void Plot::draw(Render3d *renderer, std::function<std::complex<double>(double)> f, std::function<bool(double)> set) {
+    renderer->clear();
+    this->drawAxis(renderer);
+
+    Point3d point{};
+    for(double x=-range; x<=range; x+=res) {
+        if(set(x)) {
+            std::complex<double> v = f(x);
+            point.x = std::real(v);
+            point.y = std::imag(v);
+            point.z = x;
+            if (std::abs(point.x) < range && std::abs(point.y) < range) {
+                point.color = getColor(v);
+                renderer->addPoint(point);
             }
         }
     }
+}
 
+template<>
+void Plot::draw(Render3d *renderer, std::function<double(std::complex<double>)> f, std::function<bool(std::complex<double>)> set) {
+    renderer->clear();
+    this->drawAxis(renderer);
+
+    Point3d point{};
     for(double x=-range; x<=range; x+=res) {
         for(double y=-range; y<=range; y+=res) {
-            std::complex<double> v = f(std::complex<double>(x,y));
-
-            point3d.x = x;
-            point3d.y = y;
-            point3d.z = std::abs(v);
-            point3d.color = getColor(v);
-
-            renderer->addPoint(point3d);
+            if(set(std::complex<double>(x,y))) {
+                double v = f(std::complex<double>(x, y));
+                point.x = x;
+                point.y = y;
+                point.z = v;
+                if (point.z < range) {
+                    point.color = getColor(v);
+                    renderer->addPoint(point);
+                }
+            }
         }
     }
+}
+
+template<>
+void Plot::draw(Render3d *renderer, std::function<std::complex<double>(std::complex<double>)> f, std::function<bool(std::complex<double>)> set) {
+    renderer->clear();
+    this->drawAxis(renderer);
+
+    Point3d point{};
+    for(double x=-range; x<=range; x+=res) {
+        for(double y=-range; y<=range; y+=res) {
+            if(set(std::complex<double>(x,y))) {
+                std::complex<double> v = f(std::complex<double>(x, y));
+                point.x = x;
+                point.y = y;
+                point.z = std::abs(v);
+                if (point.z < range) {
+                    point.color = getColor(v);
+                    renderer->addPoint(point);
+                }
+            }
+        }
+    }
+}
+
+
+void Plot::drawAxis(Render3d *renderer) {
+    Point3d point{};
+    if(axisEnabled) {
+        point.color = 0xFFFFFF;
+        for(double c=-range; c<range; c+=res) {
+            point.x = c;
+            point.y = 0;
+            point.z = 0;
+            renderer->addPoint(point);
+            point.x = 0;
+            point.y = c;
+            point.z = 0;
+            renderer->addPoint(point);
+            if(c >= 0) {
+                point.x = 0;
+                point.y = 0;
+                point.z = c;
+                renderer->addPoint(point);
+            }
+        }
+        for(double c=range*0.97; c<range; c+=res) {
+            for(int a = 0; a<64; a++) {
+                point.x = c;
+                point.y = sin(a/64.0 * 2 * M_PI) * (range-c);
+                point.z = cos(a/64.0 * 2 * M_PI) * (range-c);
+                renderer->addPoint(point);
+                point.z = c;
+                point.y = sin(a/64.0 * 2 * M_PI) * (range-c);
+                point.x = cos(a/64.0 * 2 * M_PI) * (range-c);
+                renderer->addPoint(point);
+                point.y = c;
+                point.x = sin(a/64.0 * 2 * M_PI) * (range-c);
+                point.z = cos(a/64.0 * 2 * M_PI) * (range-c);
+                renderer->addPoint(point);
+            }
+        }
+    }
+
 }
 
 uint32_t Plot::getColor(std::complex<double> z) {
@@ -83,3 +140,14 @@ double Plot::tri(double x, double w) {
         return 1 - fabs(x/w);
     }
 }
+
+uint32_t Plot::getColor(double z) {
+    const double TRI_WIDTH = range;
+
+    auto r = (uint8_t)(tri(z - range, TRI_WIDTH)*255);
+    auto g = (uint8_t)(tri(z, TRI_WIDTH)*255);
+    auto b = (uint8_t)(tri(z + range, TRI_WIDTH) * 255);
+
+    return r << 16 | g << 8 | b;
+}
+

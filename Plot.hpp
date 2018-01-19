@@ -13,14 +13,20 @@
 class Plot {
 public:
     explicit Plot(double range = 10, double res = 0.5, bool axisEnabled = true);
-    void draw(std::function<std::complex<double>(std::complex<double>)> f, Render3d* renderer);
+
+    template<typename I, typename O> void draw(Render3d* renderer, std::function<O(I)> f,
+              std::function<bool(I)> set = [](I z){
+                  return true;
+              });
 
 private:
     double range, res;
     double axisEnabled;
+    void drawAxis(Render3d* renderer);
 
     static double tri(double x, double w = 1);
-    static uint32_t getColor(std::complex<double> z);
+    uint32_t getColor(std::complex<double> z);
+    uint32_t getColor(double z);
 };
 
 

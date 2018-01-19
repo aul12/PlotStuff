@@ -13,18 +13,20 @@ int main() {
     config.rotation = M_PI* 5/4;
 
     Render3d render3d;
-    Plot plot(10,0.08, true);
-    plot.draw([](std::complex<double> z){
-        return z;
+    Plot plot(3,0.01, true);
+    /*plot.draw<std::complex<double>, std::complex<double> >(&render3d, [](std::complex<double> z){
+        //return z;
         //return z*z;
-        //return (pow(z,3)-std::complex<double>(1,0))/z;
-        //return std::complex<double>(1,0)/(std::complex<double>(1,0)+z*z);
+        //return (pow(z,3)-1.0)/z;
+        return 1.0/(1.0+z*z);
         //return sin(z);
-        //return exp(std::complex<double>(1,0)/z);
+        //return exp(1.0/z);
+    });*/
+    plot.draw<std::complex<double>,double>(&render3d, [](std::complex<double> t){
+        return std::real(t);
+    });
 
-    }, &render3d);
-
-    BmpWriter bmpWriter(800, 800, "test.bmp");
+    BmpWriter bmpWriter(800, 800, "bitmaps/test.bmp");
 
     XWriter xWriter(800, 800);
 

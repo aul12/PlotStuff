@@ -84,3 +84,4 @@ gen
 .idea/
 cmake-build-debug/
 test.bmp
+/bitmaps/

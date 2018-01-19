@@ -21,9 +21,9 @@ void Render3d::addPoint(Point3d point) {
 void Render3d::render(ImageWriter* writer, RenderConfig config) {
     double xCam, yCam, zCam;
 
-    xCam = cos(config.rotation) * 1000;
-    yCam = sin(config.rotation) * 1000;
-    zCam = sin(config.zTilt) * 1000;
+    xCam = cos(config.rotation) * 100;
+    yCam = sin(config.rotation) * 100;
+    zCam = -sin(config.zTilt) * 100;
 
     std::sort(points.begin(), points.end(), [xCam, yCam, zCam](Point3d a, Point3d b) {
         double aDist = SQR(a.x - xCam) + SQR(a.y - yCam) + SQR(a.z - zCam);
@@ -32,8 +32,8 @@ void Render3d::render(ImageWriter* writer, RenderConfig config) {
         return (aDist < bDist);
     });
 
-    double rScale = writer->width/2 * 1/rMax * 1/2;
-    double zScale = writer->height/2 * 1/zMax;
+    double rScale = writer->width/3 * 1/rMax;
+    double zScale = writer->height/3*2 * 1/zMax;
 
     writer->clear();
 
@@ -75,4 +75,8 @@ void Render3d::render(ImageWriter* writer, RenderConfig config) {
 
 void Render3d::clear() {
     points.clear();
+}
+
+Render3d::Render3d() {
+    zMax = rMax = 0;
 }

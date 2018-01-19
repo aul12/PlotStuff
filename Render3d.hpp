@@ -19,6 +19,7 @@ struct RenderConfig {
 
 class Render3d {
 public:
+    Render3d();
     void addPoint(Point3d point);
     void render(ImageWriter* writer, RenderConfig config);
     void clear();
