@@ -33,7 +33,7 @@ void Render3d::render(ImageWriter* writer, RenderConfig config) {
     });
 
     double rScale = writer->width/3 * 1/rMax;
-    double zScale = writer->height/3*2 * 1/zMax;
+    double zScale = writer->height/2 * 1/zMax;
 
     writer->clear();
 
@@ -60,7 +60,7 @@ void Render3d::render(ImageWriter* writer, RenderConfig config) {
 
         // Center on image
         x += writer->width/2;
-        y += writer->height/4;
+        y += writer->height/2;
 
         if(x >= 0 && y >= 0 && x < writer->width &&  y < writer->height) {
             auto r = (uint8_t)((point.color & 0xFF0000) >> 16);

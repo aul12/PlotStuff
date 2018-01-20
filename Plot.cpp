@@ -61,7 +61,7 @@ void Plot::draw(Render3d *renderer, std::function<double(std::complex<double>)> 
 template<>
 void Plot::draw(Render3d *renderer, std::function<std::complex<double>(std::complex<double>)> f, std::function<bool(std::complex<double>)> set) {
     renderer->clear();
-    this->drawAxis(renderer);
+    this->drawAxis(renderer, false);
 
     Point3d point{};
     for(double x=-range; x<=range; x+=res) {
@@ -81,7 +81,7 @@ void Plot::draw(Render3d *renderer, std::function<std::complex<double>(std::comp
 }
 
 
-void Plot::drawAxis(Render3d *renderer) {
+void Plot::drawAxis(Render3d *renderer, bool negEnabled) {
     Point3d point{};
     if(axisEnabled) {
         point.color = 0xFFFFFF;
@@ -94,7 +94,7 @@ void Plot::drawAxis(Render3d *renderer) {
             point.y = c;
             point.z = 0;
             renderer->addPoint(point);
-            if(c >= 0) {
+            if(negEnabled || c >= 0) {
                 point.x = 0;
                 point.y = 0;
                 point.z = c;

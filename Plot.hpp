@@ -22,7 +22,7 @@ public:
 private:
     double range, res;
     double axisEnabled;
-    void drawAxis(Render3d* renderer);
+    void drawAxis(Render3d* renderer, bool negEnabled = true);
 
     static double tri(double x, double w = 1);
     uint32_t getColor(std::complex<double> z);
