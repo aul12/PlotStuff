@@ -4,7 +4,7 @@
 #include "Render3d.hpp"
 #include "Pcd.hpp"
 #include "Output/BmpWriter.hpp"
-#include "Output/XWriter.hpp"
+#include "Output/SfmlWriter.h"
 
 
 int main() {
@@ -30,7 +30,8 @@ int main() {
 
     BmpWriter bmpWriter(800, 800, "bitmaps/test.bmp");
 
-    XWriter xWriter(800, 800);
+    //XWriter xWriter(800, 800);
+    SfmlWriter xWriter{800, 800};
 
     bool renderReq = true;
 

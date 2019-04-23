@@ -32,7 +32,7 @@ void Pcd::draw(Render3d *renderer, std::string fname) {
         std::stringstream stringstream{line};
         Point3d point{};
         stringstream >> point.x >> point.y >> point.z;
-        point.color = 0xFFFFFF;
+        point.color = 0xFF0000;
         renderer->addPoint(point);
     }
 }
