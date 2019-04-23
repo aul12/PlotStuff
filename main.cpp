@@ -2,7 +2,7 @@
 #include <cmath>
 #include <complex>
 #include "Render3d.hpp"
-#include "Plot.hpp"
+#include "Pcd.hpp"
 #include "Output/BmpWriter.hpp"
 #include "Output/XWriter.hpp"
 
@@ -13,7 +13,7 @@ int main() {
     config.rotation = M_PI* 5/4;
 
     Render3d render3d;
-    Plot plot(3,0.01, true);
+    //Plot plot(3,0.01, true);
     /*plot.draw<std::complex<double>, std::complex<double> >(&render3d, [](std::complex<double> z){
         //return z;
         //return z*z;
@@ -22,9 +22,11 @@ int main() {
         //return sin(z);
         //return exp(1.0/z);
     });*/
-    plot.draw<std::complex<double>,double>(&render3d, [](std::complex<double> t){
+    /*plot.draw<std::complex<double>,double>(&render3d, [](std::complex<double> t){
         return std::real(t);
-    });
+    });*/
+    Pcd pcd{true, 1};
+    pcd.draw(&render3d, "/mnt/BachelorArbeitPaul/Daten/19_04_23_Keller1/pointcloud_0.pcd");
 
     BmpWriter bmpWriter(800, 800, "bitmaps/test.bmp");
 
@@ -53,16 +55,6 @@ int main() {
             case 's':
                 config.zTilt = std::max(config.zTilt-M_PI/8.0, 0.0);
                 break;
-           /* case '+':
-                config.xScale *= 1.2;
-                config.yScale *= 1.2;
-                config.zScale *= 1.2;
-                break;
-            case '-':
-                config.xScale /= 1.2;
-                config.yScale /= 1.2;
-                config.zScale /= 1.2;
-                break;*/
             case 'b':
                 std::cout << "Rendering ..." << std::endl;
                 render3d.render(&bmpWriter, config);

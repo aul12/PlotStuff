@@ -13,7 +13,7 @@ void Render3d::addPoint(Point3d point) {
     }
 
     if(fabs(point.z) > zMax) {
-        zMax = point.z;
+        zMax = fabs(point.z);
     }
     points.push_back(point);
 }
